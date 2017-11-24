@@ -7,21 +7,28 @@ using namespace std;
 struct tupla {
     double x;
     double y;
-    double ang;
+    double z;
+
+    double angA;
+    double angB;
 };
 
 struct linha {
     double x0;
     double y0;
+    double z0;
+
     double x1;
     double y1;
+    double z1;
 };
 
 class LSystem {
     private:
         int iteracoes;
-        int distancia;
+        double distancia;
         double angulo;
+
         string axioma;
         vector<string> regras;
 
@@ -75,40 +82,71 @@ class LSystem {
             stack< struct tupla > pilha_tupla;
             
             struct tupla tupla_atual;
-            
+
+            // Tupla inicial
             tupla_atual.x = 0.0;
             tupla_atual.y = 0.0;
-            tupla_atual.ang = 90.0;
+            tupla_atual.z = 1.0;
+
+            tupla_atual.angB = 90.0;
+            tupla_atual.angA = 90.0;
             
             string cadeia = gera_cadeia();
 
             for(int i = 0; i < cadeia.size(); i++) {
                 switch(cadeia[i]) {
                     case 'F':
+                        //cout << tupla_atual.angA*(M_PI/180) << ' ' << tupla_atual.angB*(M_PI/180) << '\n';
+
                         struct linha linha;
             
                         linha.x0 = tupla_atual.x;
                         linha.y0 = tupla_atual.y;
+                        linha.z0 = tupla_atual.z;
 
-                        double cosx, sinx;
-                        cosx = cos(tupla_atual.ang*M_PI/180.0);
-                        sinx = sin(tupla_atual.ang*M_PI/180.0);
+                        double cosa, sina, cosb, sinb;
+                        
+                        cosa = cos(tupla_atual.angA*(M_PI/180.0));
+                        sina = sin(tupla_atual.angA*(M_PI/180.0));
 
-                        tupla_atual.x += distancia*cosx;
-                        tupla_atual.y += distancia*sinx;
+                        cosb = cos(tupla_atual.angB*(M_PI/180.0));
+                        sinb = sin(tupla_atual.angB*(M_PI/180.0));
+
+                        if(tupla_atual.angA == 90)
+                            cosa = 0;
+                        if(tupla_atual.angB == 90)
+                            cosb = 0;
+
+                        tupla_atual.x += distancia*sinb*cosa;
+                        tupla_atual.y += distancia*sinb*sina;
+                        tupla_atual.z += distancia*cosb;
 
                         linha.x1 = tupla_atual.x;
                         linha.y1 = tupla_atual.y;
+                        linha.z1 = tupla_atual.z;
+
+                        cout << linha.x0 << ' ' << linha.y0 << ' ' << linha.z0 << '\n';
+                        cout << linha.x1 << ' ' << linha.y1 << ' ' << linha.z1 << '\n';
+
+                        cout << '\n';
                         
                         linhas.push_back(linha);
                     break;
 
                     case '+':
-                        tupla_atual.ang += angulo;
+                        tupla_atual.angA += angulo;
                     break;
 
                     case '-':
-                        tupla_atual.ang -= angulo;
+                        tupla_atual.angA -= angulo;
+                    break;
+
+                    case '>':
+                        tupla_atual.angB += angulo;
+                    break;
+
+                    case '<':
+                        tupla_atual.angB -= angulo;
                     break;
 
                     case '[':
@@ -118,6 +156,9 @@ class LSystem {
                     case ']':
                         tupla_atual = pilha_tupla.top();
                         pilha_tupla.pop();
+                    break;
+
+                    default:
                     break;
                 }
             }
