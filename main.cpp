@@ -22,9 +22,9 @@ int main(int argc, char* args[]) {
 
   // Desenha arvore
   vector<string> regras;
-  regras.push_back("F=FF[+VF][-CF][>>VF][<XF]");
+  regras.push_back("F=FF[+VFF][-CF][>>VF][<XF]");
 
-  LSystem *arvore = new LSystem(5, 5, 22.0, "F", regras);
+  LSystem *arvore = new LSystem(5, 5, 22.0, "F[+F][-F]", regras);
 
   vector<struct linha> linhas = arvore->gera_linhas();
 
@@ -52,7 +52,7 @@ int main(int argc, char* args[]) {
         SDL_SetRenderDrawColor(renderer, 45, 252, 0, SDL_ALPHA_OPAQUE);
 
       // Desenha a linha
-      SDL_RenderDrawLine(renderer, int(linhas[i].x0)+300, -int(linhas[i].y0)+400, int(linhas[i].x1)+300, -int(linhas[i].y1)+400);
+      SDL_RenderDrawLine(renderer, int(linhas[i].x0)+400, -int(linhas[i].y0)+600, int(linhas[i].x1)+400, -int(linhas[i].y1)+600);
 
       // Faz a rotação no eixo Y - Usei para teste
       x = (linhas[i].x0*cosx + linhas[i].z0*sinx);
