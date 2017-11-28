@@ -9,6 +9,8 @@ struct tupla {
     double y;
     double z;
 
+    int cor;
+
     double angA;
     double angB;
 };
@@ -21,6 +23,8 @@ struct linha {
     double x1;
     double y1;
     double z1;
+
+    int cor;
 };
 
 class LSystem {
@@ -88,6 +92,8 @@ class LSystem {
             tupla_atual.y = 0.0;
             tupla_atual.z = 1.0;
 
+            tupla_atual.cor = 1;
+
             tupla_atual.angB = 90.0;
             tupla_atual.angA = 90.0;
             
@@ -125,6 +131,8 @@ class LSystem {
                         linha.y1 = tupla_atual.y;
                         linha.z1 = tupla_atual.z;
 
+                        linha.cor = tupla_atual.cor;
+
                         cout << linha.x0 << ' ' << linha.y0 << ' ' << linha.z0 << '\n';
                         cout << linha.x1 << ' ' << linha.y1 << ' ' << linha.z1 << '\n';
 
@@ -156,6 +164,26 @@ class LSystem {
                     case ']':
                         tupla_atual = pilha_tupla.top();
                         pilha_tupla.pop();
+                    break;
+
+                    // Cor Marron
+                    case 'M':
+                        tupla_atual.cor = 1;
+                    break;
+                    
+                    // Cor Verde 1
+                    case 'V':
+                        tupla_atual.cor = 2;
+                    break;
+
+                    // Cor Verde 2
+                    case 'C':
+                        tupla_atual.cor = 3;
+                    break;
+
+                    // Cor Verde 3
+                    case 'X':
+                        tupla_atual.cor = 4;
                     break;
 
                     default:

@@ -22,30 +22,39 @@ int main(int argc, char* args[]) {
 
   // Desenha arvore
   vector<string> regras;
-  regras.push_back("F=FF[+F][-F][>F][<F]");
+  regras.push_back("F=FF[+VF][-CF][>>VF][<XF]");
 
-  LSystem *arvore = new LSystem(4, 5, 40.0, "F", regras);
+  LSystem *arvore = new LSystem(5, 5, 22.0, "F", regras);
 
   vector<struct linha> linhas = arvore->gera_linhas();
 
   // Gira
-  double rad = 5.0 * M_PI/180.0;
+  double rad = 10.0 * M_PI/180.0;
   double sinx = sin(rad);
   double cosx = cos(rad);
 
-  for(int k = 1; k < 50; k++) {
-    double x0, y0, x1, y1;
+  double x, y, z;
+
+  for(int k = 1; k < 200; k++) {
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-
     for(int i = 0; i < linhas.size(); i++) {
-      SDL_RenderDrawLine(renderer, int(linhas[i].x0)+300, -int(linhas[i].y0)+200, int(linhas[i].x1)+300, -int(linhas[i].y1)+200);
-      
-      double x, y, z;
+      // Pinta com a cor correta
+      if(linhas[i].cor == 1)
+        SDL_SetRenderDrawColor(renderer, 58, 28, 2, SDL_ALPHA_OPAQUE);
+      if(linhas[i].cor == 2)
+        SDL_SetRenderDrawColor(renderer, 37, 147, 7, SDL_ALPHA_OPAQUE);
+      if(linhas[i].cor == 3)
+        SDL_SetRenderDrawColor(renderer, 37, 181, 5, SDL_ALPHA_OPAQUE);
+      if(linhas[i].cor == 4)
+        SDL_SetRenderDrawColor(renderer, 45, 252, 0, SDL_ALPHA_OPAQUE);
 
+      // Desenha a linha
+      SDL_RenderDrawLine(renderer, int(linhas[i].x0)+300, -int(linhas[i].y0)+400, int(linhas[i].x1)+300, -int(linhas[i].y1)+400);
+
+      // Faz a rotação no eixo Y - Usei para teste
       x = (linhas[i].x0*cosx + linhas[i].z0*sinx);
       y = linhas[i].y0;
       z = (linhas[i].x0*(-sinx) + linhas[i].z0*cosx);
