@@ -11,6 +11,7 @@ struct ponto {
 class Planta: public LSystem {
     private:
         struct ponto posicao_objeto;
+        struct ponto centro_universo;
 
         vector<struct linha> translata(struct ponto ponto_trans) {
             vector<struct linha> linhas_trans = linhas;
@@ -69,10 +70,11 @@ class Planta: public LSystem {
 
     public:
         Planta(int _iteracoes, int _distancia, double _angulo, string _axioma, 
-            vector<string> _regras, struct ponto centro_universo, struct ponto _posicao_objeto)
+            vector<string> _regras, struct ponto _centro_universo, struct ponto _posicao_objeto)
             :LSystem(_iteracoes, _distancia, _angulo, _axioma, _regras)
             {
                 
+                centro_universo = _centro_universo;
                 posicao_objeto = _posicao_objeto;
 
                 struct ponto novo_ponto;
@@ -97,7 +99,7 @@ class Planta: public LSystem {
                 linhas_proj[i].z1 = 0;
             }
 
-            linhas_proj = translata(posicao_objeto);
+            linhas_proj = translata(centro_universo);
 
             return linhas_proj;
         }
