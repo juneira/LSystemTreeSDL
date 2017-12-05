@@ -1,6 +1,7 @@
-#include <string.h>
+#include <string>
 #include <stack>
-#include <cmath> 
+#include <cmath>
+#include <vector>
 
 using namespace std;
 
@@ -28,6 +29,9 @@ struct linha {
 };
 
 class LSystem {
+    protected:
+        vector<linha> linhas;
+
     private:
         int iteracoes;
         double distancia;
@@ -68,15 +72,6 @@ class LSystem {
             return nova_cadeia;
         }
 
-    public:
-        LSystem(int _iteracoes, int _distancia, double _angulo, string _axioma, vector<string> _regras) {
-            iteracoes = _iteracoes;
-            angulo = _angulo;
-            axioma = _axioma;
-            regras = _regras;
-            distancia = _distancia;
-        }
-
         /*
             Função vector<struct linha> gera_linhas()
             Usa a cadeia resultante para gerar linhas com origem de (x, y) em (0, 0) 
@@ -102,8 +97,6 @@ class LSystem {
             for(int i = 0; i < cadeia.size(); i++) {
                 switch(cadeia[i]) {
                     case 'F':
-                        //cout << tupla_atual.angA*(M_PI/180) << ' ' << tupla_atual.angB*(M_PI/180) << '\n';
-
                         struct linha linha;
             
                         linha.x0 = tupla_atual.x;
@@ -132,11 +125,6 @@ class LSystem {
                         linha.z1 = tupla_atual.z;
 
                         linha.cor = tupla_atual.cor;
-
-                        cout << linha.x0 << ' ' << linha.y0 << ' ' << linha.z0 << '\n';
-                        cout << linha.x1 << ' ' << linha.y1 << ' ' << linha.z1 << '\n';
-
-                        cout << '\n';
                         
                         linhas.push_back(linha);
                     break;
@@ -185,12 +173,20 @@ class LSystem {
                     case 'X':
                         tupla_atual.cor = 4;
                     break;
-
-                    default:
-                    break;
                 }
             }
 
             return linhas;
+        }
+
+    public:
+        LSystem(int _iteracoes, int _distancia, double _angulo, string _axioma, vector<string> _regras) {
+            iteracoes = _iteracoes;
+            angulo = _angulo;
+            axioma = _axioma;
+            regras = _regras;
+            distancia = _distancia;
+
+            linhas = gera_linhas();
         }
 };

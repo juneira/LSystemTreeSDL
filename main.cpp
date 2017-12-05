@@ -1,11 +1,7 @@
 #include <iostream>
-#include <string>
-#include <vector>
-#include "lsystem.h"
+#include "planta.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_keyboard.h>
-
-using namespace std;
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -24,21 +20,32 @@ int main(int argc, char* args[]) {
   vector<string> regras;
   regras.push_back("F=FF[+VFF][-CF][>>VF][<XF]");
 
-  LSystem *arvore = new LSystem(5, 5, 22.0, "F[+F][-F]", regras);
+  struct ponto centro_universo;
 
-  vector<struct linha> linhas = arvore->gera_linhas();
+  centro_universo.x = 400;
+  centro_universo.y = 300;
+  centro_universo.z = 0;
+
+  struct ponto posicao_objeto;
+
+  posicao_objeto.x = 600;
+  posicao_objeto.y = 300;
+  posicao_objeto.z = 0;
+
+  Planta *p = new Planta(4, 5, 22.0, "F[+F][-F]", regras, centro_universo, posicao_objeto);
+
+  vector<struct linha> linhas;
 
   // Gira
   double rad = 10.0 * M_PI/180.0;
   double sinx = sin(rad);
   double cosx = cos(rad);
 
-  double x, y, z;
-
-  for(int k = 1; k < 200; k++) {
-
+  for(int j = 0; j < 300; j++) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
+
+    linhas = p->projeta_rotaciona('y', 2);
 
     for(int i = 0; i < linhas.size(); i++) {
       // Pinta com a cor correta
@@ -52,33 +59,14 @@ int main(int argc, char* args[]) {
         SDL_SetRenderDrawColor(renderer, 45, 252, 0, SDL_ALPHA_OPAQUE);
 
       // Desenha a linha
-      SDL_RenderDrawLine(renderer, int(linhas[i].x0)+400, -int(linhas[i].y0)+600, int(linhas[i].x1)+400, -int(linhas[i].y1)+600);
-
-      // Faz a rotação no eixo Y - Usei para teste
-      x = (linhas[i].x0*cosx + linhas[i].z0*sinx);
-      y = linhas[i].y0;
-      z = (linhas[i].x0*(-sinx) + linhas[i].z0*cosx);
-
-      linhas[i].x0 = x;
-      linhas[i].y0 = y;
-      linhas[i].z0 = z;
-      
-      x = (linhas[i].x1*cosx + linhas[i].z1*sinx);
-      y = linhas[i].y1;
-      z = (linhas[i].x1*(-sinx) + linhas[i].z1*cosx);
-
-      linhas[i].x1 = x;
-      linhas[i].y1 = y;
-      linhas[i].z1 = z;
+      //cout << int(linhas[i].x0) << ' ' << int(linhas[i].y0) << ' ' << int(linhas[i].x1) << ' ' << int(linhas[i].y1) << '\n';
+      SDL_RenderDrawLine(renderer, int(linhas[i].x0), 600-int(linhas[i].y0), int(linhas[i].x1), 600-int(linhas[i].y1));
     }
-    
+    SDL_Delay(20);
     SDL_RenderPresent(renderer);
-    SDL_Delay(50);  
   }
-
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
-
   SDL_Quit();
 
   return 0;
