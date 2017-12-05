@@ -1,6 +1,5 @@
 #include <iostream>
-#include "planta.h"
-#include <SDL2/SDL.h>
+#include "universo.h"
 #include <SDL2/SDL_keyboard.h>
 
 const int SCREEN_WIDTH = 800;
@@ -23,48 +22,36 @@ int main(int argc, char* args[]) {
   struct ponto centro_universo;
 
   centro_universo.x = 400;
-  centro_universo.y = 300;
+  centro_universo.y = 0;
   centro_universo.z = 0;
 
   struct ponto posicao_objeto;
 
-  posicao_objeto.x = 600;
-  posicao_objeto.y = 300;
+  posicao_objeto.x = 200;
+  posicao_objeto.y = 0;
   posicao_objeto.z = 0;
 
-  Planta *p = new Planta(4, 5, 22.0, "F[+F][-F]", regras, centro_universo, posicao_objeto);
+  Planta* p1 = new Planta(4, 5, 22.0, "F[+F][-F]", regras, centro_universo, posicao_objeto);
+  posicao_objeto.x = 250;
+  posicao_objeto.z = 50;
+  Planta* p2 = new Planta(4, 3, 22.0, "F[+F][-F]", regras, centro_universo, posicao_objeto);
+  posicao_objeto.x = 300;
+  posicao_objeto.z = 50;
+  Planta* p3 = new Planta(4, 2, 22.0, "F[+F][-F]", regras, centro_universo, posicao_objeto);
 
-  vector<struct linha> linhas;
+  vector< Planta* > plantas;
+  plantas.push_back(p1);
+  plantas.push_back(p2);
+  plantas.push_back(p3);
 
-  // Gira
-  double rad = 10.0 * M_PI/180.0;
-  double sinx = sin(rad);
-  double cosx = cos(rad);
-
-  for(int j = 0; j < 300; j++) {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(renderer);
-
-    linhas = p->projeta_rotaciona('y', 2);
-
-    for(int i = 0; i < linhas.size(); i++) {
-      // Pinta com a cor correta
-      if(linhas[i].cor == 1)
-        SDL_SetRenderDrawColor(renderer, 58, 28, 2, SDL_ALPHA_OPAQUE);
-      if(linhas[i].cor == 2)
-        SDL_SetRenderDrawColor(renderer, 37, 147, 7, SDL_ALPHA_OPAQUE);
-      if(linhas[i].cor == 3)
-        SDL_SetRenderDrawColor(renderer, 37, 181, 5, SDL_ALPHA_OPAQUE);
-      if(linhas[i].cor == 4)
-        SDL_SetRenderDrawColor(renderer, 45, 252, 0, SDL_ALPHA_OPAQUE);
-
-      // Desenha a linha
-      //cout << int(linhas[i].x0) << ' ' << int(linhas[i].y0) << ' ' << int(linhas[i].x1) << ' ' << int(linhas[i].y1) << '\n';
-      SDL_RenderDrawLine(renderer, int(linhas[i].x0), 600-int(linhas[i].y0), int(linhas[i].x1), 600-int(linhas[i].y1));
-    }
-    SDL_Delay(20);
-    SDL_RenderPresent(renderer);
+  // Cria o Universo
+  Universo* universo = new Universo(centro_universo, plantas, renderer);
+  
+  for(int i = 0; i < 200; i++) {
+    universo->desenha_rotaciona('y', 10.0);
+    SDL_Delay(100);
   }
+
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();

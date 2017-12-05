@@ -109,8 +109,8 @@ class Planta: public LSystem {
             return projeta();
         }
 
-        vector<struct linha> projeta_translata(struct ponto _posicao_objeto) {
-            posicao_objeto = _posicao_objeto;
+        vector<struct linha> projeta_translata(struct ponto _centro_universo) {
+            centro_universo = _centro_universo;
             return projeta();
         }
 };
