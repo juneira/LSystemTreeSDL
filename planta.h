@@ -37,6 +37,7 @@ class Planta: public LSystem {
             double sinx = sin(rad);
             double cosx = cos(rad);
 
+            // Atualiza as linhas da planta
             for(int i = 0; i < linhas_rot.size(); i++) {
                 switch(op) {
                     case 'x':
@@ -64,6 +65,34 @@ class Planta: public LSystem {
                     break;
                 }
             }
+
+            // Atualiza posição da planta
+            double x, y, z;
+            
+            x = posicao_objeto.x;
+            y = posicao_objeto.y;
+            z = posicao_objeto.z;
+
+            switch(op) {
+                case 'x':
+                    y = posicao_objeto.y*cosx + posicao_objeto.z*(-sinx);
+                    z = posicao_objeto.y*sinx + posicao_objeto.z*(cosx);
+                break;
+
+                case 'y':
+                    x = posicao_objeto.x*cosx + posicao_objeto.z*sinx;
+                    z = posicao_objeto.x*(-sinx) + posicao_objeto.z*cosx;
+                break;
+
+                case 'z':
+                    x = posicao_objeto.x*cosx + posicao_objeto.y*(-sinx);
+                    y = posicao_objeto.x*sinx + posicao_objeto.y*cosx;
+                break;
+            }
+
+            posicao_objeto.x = x;
+            posicao_objeto.y = y;
+            posicao_objeto.z = z;
             
             return linhas_rot;
         }
@@ -112,5 +141,9 @@ class Planta: public LSystem {
         vector<struct linha> projeta_translata(struct ponto _centro_universo) {
             centro_universo = _centro_universo;
             return projeta();
+        }
+
+        struct ponto get_posicao_objeto() {
+            return posicao_objeto;
         }
 };
