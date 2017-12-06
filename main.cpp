@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include "universo.h"
 #include <SDL2/SDL_keyboard.h>
 
@@ -6,6 +7,8 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
 int main(int argc, char* args[]) {
+  srand (time(NULL));
+  
   SDL_Surface* windowSurface = NULL;
   
   SDL_Window* window = NULL;
@@ -28,24 +31,32 @@ int main(int argc, char* args[]) {
   centro_universo.y = 0;
   centro_universo.z = 0;
 
+  vector< Planta* > plantas;  
+  
   struct ponto posicao_objeto;
 
+  // Adicionando plantas
   posicao_objeto.x = 250;
   posicao_objeto.y = 20;
   posicao_objeto.z = 0;
-
-  Planta* p1 = new Planta(4, 5, 22.0, "F[+F][-F]", regras, centro_universo, posicao_objeto);
+  plantas.push_back(new Planta(4, 5, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
   posicao_objeto.x = 250;
-  posicao_objeto.z = 50;
-  Planta* p2 = new Planta(4, 3, 22.0, "F[+F][-F]", regras, centro_universo, posicao_objeto);
-  posicao_objeto.x = 250;
-  posicao_objeto.z = 150;
-  Planta* p3 = new Planta(4, 6, 22.0, "F[+F][-F]", regras2, centro_universo, posicao_objeto);
+  posicao_objeto.z = -50;
+  plantas.push_back(new Planta(4, 3, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
+  posicao_objeto.x = 400;
+  posicao_objeto.z = 0;
+  plantas.push_back(new Planta(4, 6, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
 
-  vector< Planta* > plantas;
-  plantas.push_back(p1);
-  plantas.push_back(p2);
-  plantas.push_back(p3);
+  for(int i = -100; i < 100; i+=50) {
+    for(int j = -100; j < 100; j+=50) {
+
+      posicao_objeto.x = 400 + (100 - rand()%200);
+      posicao_objeto.z = 100 - rand()%200;
+
+      plantas.push_back(new Planta(3, 3, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
+    }
+  }
+  
 
   // Cria o Universo
   Universo* universo = new Universo(centro_universo, plantas, renderer);
