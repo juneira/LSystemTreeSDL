@@ -100,7 +100,8 @@ class Universo {
         void escolhe_cor(struct RGB rgb, double z) {
             struct HSL hsl = RGB2HSL(rgb);
 
-            hsl.L += fmax(-(2*z)/2000.0, 0);
+            double k = hsl.L - (2*z)/2000.0;
+            hsl.L = fmax(k, 0);
 
             rgb = HSL2RGB(hsl);
 
