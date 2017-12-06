@@ -21,9 +21,12 @@ int main(int argc, char* args[]) {
   // Desenha arvore
   vector<string> regras;
   regras.push_back("F=FF[+VFF][-CF][>>VF][<XF]");
+  
 
-  vector<string> regras2;
-  regras2.push_back("F=FF[+FF][-F][>F][<F]");
+  vector<string> axiomas;
+  axiomas.push_back("F[+F][-F]");
+  axiomas.push_back("F[>F][<F][+F+F]");
+  axiomas.push_back("F[+F<F][-F>F]");
 
   struct ponto centro_universo;
 
@@ -39,29 +42,26 @@ int main(int argc, char* args[]) {
   posicao_objeto.x = 250;
   posicao_objeto.y = 20;
   posicao_objeto.z = 0;
-  plantas.push_back(new Planta(4, 5, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
+  plantas.push_back(new Planta(3, 3, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
   posicao_objeto.x = 250;
   posicao_objeto.z = -50;
-  plantas.push_back(new Planta(4, 3, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
+  plantas.push_back(new Planta(2, 3, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
   posicao_objeto.x = 400;
   posicao_objeto.z = 0;
   plantas.push_back(new Planta(4, 6, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
 
-  for(int i = -100; i < 100; i+=50) {
-    for(int j = -100; j < 100; j+=50) {
+  for(int i = 0; i < 100; i++) {
+    posicao_objeto.x = 400 + (200 - rand()%400);
+    posicao_objeto.z = 200 - rand()%400;
 
-      posicao_objeto.x = 400 + (100 - rand()%200);
-      posicao_objeto.z = 100 - rand()%200;
-
-      plantas.push_back(new Planta(3, 3, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
-    }
+    plantas.push_back(new Planta(rand()%3+1, 3, 22.0, axiomas[rand()%3], regras, centro_universo, posicao_objeto));
   }
   
 
   // Cria o Universo
   Universo* universo = new Universo(centro_universo, plantas, renderer);
   
-  for(int i = 0; i < 200; i++) {
+  for(int i = 0; i < 50; i++) {
     universo->desenha_rotaciona('y', 10.0);
     SDL_Delay(100);
   }
