@@ -139,7 +139,24 @@ class Planta: public LSystem {
         }
 
         vector<struct linha> projeta_translata(struct ponto _centro_universo) {
-            centro_universo = _centro_universo;
+
+            centro_universo.x += _centro_universo.x;
+            centro_universo.y += _centro_universo.y;
+            centro_universo.z += _centro_universo.z;
+            posicao_objeto.x += _centro_universo.x;
+            posicao_objeto.y += _centro_universo.y;
+            posicao_objeto.z += _centro_universo.z;
+
+            struct ponto novo_ponto;
+            
+            novo_ponto.x = (posicao_objeto.x - centro_universo.x); 
+            novo_ponto.y = (posicao_objeto.y - centro_universo.y);
+            novo_ponto.z = (posicao_objeto.z - centro_universo.z);
+            
+            linhas = translata(novo_ponto);
+
+            //centro_universo = _centro_universo;
+            //linhas = translata(_centro_universo);
             return projeta();
         }
 

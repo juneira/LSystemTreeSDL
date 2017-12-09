@@ -56,15 +56,58 @@ int main(int argc, char* args[]) {
 
     plantas.push_back(new Planta(rand()%3+1, 3, 22.0, axiomas[rand()%3], regras, centro_universo, posicao_objeto));
   }
-  
 
   // Cria o Universo
   Universo* universo = new Universo(centro_universo, plantas, renderer);
-  
-  for(int i = 0; i < 50; i++) {
-    universo->desenha_rotaciona('y', 10.0);
-    SDL_Delay(100);
-  }
+
+  // Printa o Universo
+  universo->desenha();
+
+	//Pressiona ESC para sair
+  SDL_Event event;
+	bool flag_exit = false;
+	while(true) {
+		while(SDL_PollEvent(&event)) { //Escuta um evento
+		  switch(event.type){ //Eventos do teclado
+		    case SDL_KEYDOWN:
+		    	switch( event.key.keysym.sym ){
+					
+          case SDLK_LEFT:
+            universo->rotaciona('y', -10.0);
+            universo->desenha();
+            break;
+
+          case SDLK_RIGHT:
+            universo->rotaciona('y', 10.0);
+            universo->desenha();
+            break;
+          
+          case SDLK_UP:          
+            centro_universo.x = 0;
+            centro_universo.y = 0;
+            centro_universo.z = 10;
+
+            universo->translata(centro_universo);
+            universo->desenha();
+            break;
+
+          case SDLK_DOWN:          
+            centro_universo.x = 0;
+            centro_universo.y = 0;
+            centro_universo.z = -10;
+
+            universo->translata(centro_universo);
+            universo->desenha();
+            break;
+
+          case SDLK_ESCAPE:
+						flag_exit = true;			      
+		    	}
+		  	}
+		}
+	  if (flag_exit) 
+	  	break;
+	}
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);

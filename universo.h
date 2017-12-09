@@ -108,15 +108,6 @@ class Universo {
             SDL_SetRenderDrawColor(renderer, rgb.R, rgb.G, rgb.B, SDL_ALPHA_OPAQUE);
         }
 
-        void rotaciona(char op, double angulo) {
-            for(int i = 0; i < plantas.size(); i++)
-                plantas[i]->projeta_rotaciona(op, angulo);
-        }
-            
-        void translata(char op, double angulo) {
-                        
-        }
-
         void limpa_tela() {
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
@@ -178,12 +169,13 @@ class Universo {
             SDL_RenderPresent(renderer);
         }
 
-        void desenha_rotaciona(char op, double angulo) {
-            rotaciona(op, angulo);
-            desenha();
+        void rotaciona(char op, double angulo) {
+            for(int i = 0; i < plantas.size(); i++)
+                plantas[i]->projeta_rotaciona(op, angulo);
         }
 
-        void desenha_translata() {
-
+        void translata(struct ponto centro_universo) {
+            for(int i = 0; i < plantas.size(); i++)
+                plantas[i]->projeta_translata(centro_universo);  
         }
 };
