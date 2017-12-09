@@ -97,10 +97,10 @@ class Universo {
             return hsl;
         }
 
-        void escolhe_cor(struct RGB rgb, double z) {
+        void escolhe_cor(struct RGB rgb, double z, double y) {
             struct HSL hsl = RGB2HSL(rgb);
 
-            double k = hsl.L - (2*z)/2000.0;
+            double k = hsl.L - (2*z)/2000.0 + y/4000;
             hsl.L = fmax(k, 0);
 
             rgb = HSL2RGB(hsl);
@@ -134,6 +134,9 @@ class Universo {
                 double z = linhas[0].z0;
 
                 for(int j = 0; j < linhas.size(); j++) {
+                    if(min(linhas[j].z0, linhas[j].z1) < -400 || max(linhas[j].z0, linhas[j].z1) > 400)
+                        continue;            
+
                     // Pinta com a cor correta
                     struct RGB rgb;
 
@@ -159,10 +162,10 @@ class Universo {
                     }
                     
                     // Esolhe a cor e aplica iluminação
-                    escolhe_cor(rgb, z);
+                    escolhe_cor(rgb, z, max(linhas[j].y0, linhas[j].y1));
                     
                     // Desenha a linha
-                    SDL_RenderDrawLine(renderer, int(linhas[j].x0), 600-int(linhas[j].y0), int(linhas[j].x1), 600-int(linhas[j].y1));
+                    SDL_RenderDrawLine(renderer, int(linhas[j].x0), 400-int(linhas[j].y0), int(linhas[j].x1), 400-int(linhas[j].y1));
                 }
             }
 
@@ -174,8 +177,8 @@ class Universo {
                 plantas[i]->projeta_rotaciona(op, angulo);
         }
 
-        void translata(struct ponto centro_universo) {
+        void translada(struct ponto centro_universo) {
             for(int i = 0; i < plantas.size(); i++)
-                plantas[i]->projeta_translata(centro_universo);  
+                plantas[i]->projeta_translada(centro_universo);  
         }
 };

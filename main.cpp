@@ -50,9 +50,9 @@ int main(int argc, char* args[]) {
   posicao_objeto.z = 0;
   plantas.push_back(new Planta(4, 6, 22.0, "F[+F][-F][<F][>F]", regras, centro_universo, posicao_objeto));
 
-  for(int i = 0; i < 100; i++) {
-    posicao_objeto.x = 400 + (200 - rand()%400);
-    posicao_objeto.z = 200 - rand()%400;
+  for(int i = 0; i < 200; i++) {
+    posicao_objeto.x = 400 + (400 - rand()%800);
+    posicao_objeto.z = 400 - rand()%800;
 
     plantas.push_back(new Planta(rand()%3+1, 3, 22.0, axiomas[rand()%3], regras, centro_universo, posicao_objeto));
   }
@@ -87,7 +87,7 @@ int main(int argc, char* args[]) {
             centro_universo.y = 0;
             centro_universo.z = 10;
 
-            universo->translata(centro_universo);
+            universo->translada(centro_universo);
             universo->desenha();
             break;
 
@@ -96,7 +96,7 @@ int main(int argc, char* args[]) {
             centro_universo.y = 0;
             centro_universo.z = -10;
 
-            universo->translata(centro_universo);
+            universo->translada(centro_universo);
             universo->desenha();
             break;
 

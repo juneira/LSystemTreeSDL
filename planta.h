@@ -13,8 +13,8 @@ class Planta: public LSystem {
         struct ponto posicao_objeto;
         struct ponto centro_universo;
 
-        vector<struct linha> translata(struct ponto ponto_trans) {
-            vector<struct linha> linhas_trans = linhas;
+        vector<struct linha> translada(struct ponto ponto_trans, vector<struct linha> _linhas) {
+            vector<struct linha> linhas_trans = _linhas;
 
             for(int i = 0; i < linhas_trans.size(); i++) {
                 linhas_trans[i].x0 += ponto_trans.x;
@@ -112,23 +112,23 @@ class Planta: public LSystem {
                 novo_ponto.y = (posicao_objeto.y - centro_universo.y);
                 novo_ponto.z = (posicao_objeto.z - centro_universo.z);
                 
-                linhas = translata(novo_ponto);
+                linhas = translada(novo_ponto, linhas);
             }
 
         vector<struct linha> projeta() {
             vector<struct linha> linhas_proj = linhas;
 
             for(int i = 0; i < linhas_proj.size(); i++) {
-                linhas_proj[i].x0 = linhas[i].x0 + linhas[i].z0*G_45;
-                linhas_proj[i].y0 = linhas[i].y0 + linhas[i].z0*G_45;
-                linhas_proj[i].z0 = 0;
+                linhas_proj[i].x0 = linhas_proj[i].x0 + linhas_proj[i].z0*G_45;
+                linhas_proj[i].y0 = linhas_proj[i].y0 + linhas_proj[i].z0*G_45;
+                linhas_proj[i].z0 = linhas_proj[i].z0;
 
-                linhas_proj[i].x1 = linhas[i].x1 + linhas[i].z1*G_45;
-                linhas_proj[i].y1 = linhas[i].y1 + linhas[i].z1*G_45;
-                linhas_proj[i].z1 = 0;
+                linhas_proj[i].x1 = linhas_proj[i].x1 + linhas_proj[i].z1*G_45;
+                linhas_proj[i].y1 = linhas_proj[i].y1 + linhas_proj[i].z1*G_45;
+                linhas_proj[i].z1 = linhas_proj[i].z0;
             }
 
-            linhas_proj = translata(centro_universo);
+            linhas_proj = translada(centro_universo, linhas_proj);            
 
             return linhas_proj;
         }
@@ -138,25 +138,12 @@ class Planta: public LSystem {
             return projeta();
         }
 
-        vector<struct linha> projeta_translata(struct ponto _centro_universo) {
-
-            centro_universo.x += _centro_universo.x;
-            centro_universo.y += _centro_universo.y;
-            centro_universo.z += _centro_universo.z;
-            posicao_objeto.x += _centro_universo.x;
-            posicao_objeto.y += _centro_universo.y;
-            posicao_objeto.z += _centro_universo.z;
-
-            struct ponto novo_ponto;
+        vector<struct linha> projeta_translada(struct ponto novo_ponto) {
+            posicao_objeto.x += novo_ponto.x;
+            posicao_objeto.y += novo_ponto.y;
+            posicao_objeto.z += novo_ponto.z;
             
-            novo_ponto.x = (posicao_objeto.x - centro_universo.x); 
-            novo_ponto.y = (posicao_objeto.y - centro_universo.y);
-            novo_ponto.z = (posicao_objeto.z - centro_universo.z);
-            
-            linhas = translata(novo_ponto);
-
-            //centro_universo = _centro_universo;
-            //linhas = translata(_centro_universo);
+            linhas = translada(novo_ponto, linhas);
             return projeta();
         }
 
